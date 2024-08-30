@@ -1,0 +1,43 @@
+name: testing-ga
+
+#on: workflow_dispatch
+on: push
+
+jobs:
+
+   testing:
+      runs-on: ubuntu-latest
+      steps:
+
+      - name: Get Git Version
+        run: git version
+
+      - name: Get Nodejs Version
+        run: node --version
+
+   filemanipulate:
+      runs-on: ubuntu-latest
+      needs: testing
+      
+      steps:
+
+      - name: ListRootDirectory
+        run: ls -l /
+
+      - name: ListEnvs
+        run: printenv
+
+   packageInstall:
+      runs-on: ubuntu-latest
+      needs: filemanipulate
+      
+      steps:
+
+      - name: Update Package Repo
+        run: sudo apt update
+
+      - name: Install Apache
+        run: | 
+          sudo apt install apache2 -y
+          sudo apt install maven -y
+          sudo systemctl restart apache2
